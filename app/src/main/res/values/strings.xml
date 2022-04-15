@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Our Notes</string>
+
+    <string name="addNote">Agregar nota</string>
+    <string name="notificacionGrupal">Notificacion Grupal</string>
+</resources>
