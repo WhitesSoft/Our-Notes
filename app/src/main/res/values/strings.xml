@@ -3,4 +3,6 @@
 
     <string name="addNote">Agregar nota</string>
     <string name="notificacionGrupal">Notificacion Grupal</string>
+    <string name="noFountInternet">No hay conexión a internet. Conéctate a internet e inténtalo de nuevo.</string>
+    <string name="web_client_id">643292409751-57hircd0gldio9o2skq4tjfouo6fngf5.apps.googleusercontent.com</string>
 </resources>

@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
 
             android:src="@drawable/ic_delete"
-            app:fab_label="Eliminar código de acceso"
+            app:fab_label="Eliminar cuenta"
             app:fab_colorNormal="@color/principal"
             app:fab_colorPressed="@color/principal"
             app:fab_shadowRadius="1dp"

@@ -1,5 +1,6 @@
 package com.darksoft.ournotes.ui.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,13 +14,23 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.darksoft.ournotes.R;
 import com.darksoft.ournotes.databinding.ActivityMainBinding;
 import com.darksoft.ournotes.model.HomeRecyclerAdapter;
 import com.darksoft.ournotes.model.NoteModel;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -71,26 +82,30 @@ public class MainActivity extends AppCompatActivity {
 
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("¿Deseas eliminar tú código?");
+            builder.setMessage("¿Deseas eliminar tú sesión?");
             builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+//
+//                    SharedPreferences preferences = getSharedPreferences("topic", MODE_PRIVATE);
+//                    SharedPreferences.Editor editor = preferences.edit();
+//
+//                    String topic = preferences.getString("topic", "NOEXISTE");
+//
+//                    FirebaseMessaging firebaseMessaging = FirebaseMessaging.getInstance();
+//                    firebaseMessaging.unsubscribeFromTopic(topic);
+//
+//                    editor.remove("topic");
+//                    editor.commit();
 
-                    SharedPreferences preferences = getSharedPreferences("topic", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
 
-                    String topic = preferences.getString("topic", "NOEXISTE");
 
-                    FirebaseMessaging firebaseMessaging = FirebaseMessaging.getInstance();
-                    firebaseMessaging.unsubscribeFromTopic(topic);
+//                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                    startActivity(intent);
 
-                    editor.remove("topic");
-                    editor.commit();
+                    eliminar();
 
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
-
-                    finish();
+                    //finish();
 
                 }
             });
@@ -106,6 +121,33 @@ public class MainActivity extends AppCompatActivity {
 
 
         });
+    }
+
+    private void eliminar(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        GoogleSignInClient googleSignInClient;
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.web_client_id))
+                .requestEmail()
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        googleSignInClient.revokeAccess().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                user.delete().addOnCompleteListener(task1 -> {
+                    irPantallaLogin();
+                });
+            }
+        });
+
+    }
+
+    private void irPantallaLogin() {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     private void refresh() {

@@ -21,21 +21,7 @@ import java.util.Map;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static String TAG = "ServicioFirebase";
-
-
-    @Override
-    public void onNewToken(@NonNull String s) {
-        super.onNewToken(s);
-
-        Map<String, Object> userToken = new HashMap<>();
-        userToken.put("token", s);
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        db.collection("DeviceTokens").document().set(userToken);
-
-    }
-
+    
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
