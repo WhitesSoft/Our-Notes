@@ -9,14 +9,14 @@ android {
         applicationId "com.darksoft.ournotes"
         minSdkVersion 24
         targetSdkVersion 31
-        versionCode 3
-        versionName "1.2"
+        versionCode 7
+        versionName "1.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -61,6 +61,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:20.0.1'
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-crashlytics'
+
+    //Google Admob
+    implementation 'com.google.android.gms:play-services-ads:20.6.0'
 
 
     //ImageZoom

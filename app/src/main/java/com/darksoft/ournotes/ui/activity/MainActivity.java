@@ -23,6 +23,11 @@ import com.darksoft.ournotes.R;
 import com.darksoft.ournotes.databinding.ActivityMainBinding;
 import com.darksoft.ournotes.model.HomeRecyclerAdapter;
 import com.darksoft.ournotes.model.NoteModel;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -42,12 +47,23 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        //Anuncios
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         botones();
 
@@ -82,30 +98,26 @@ public class MainActivity extends AppCompatActivity {
 
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("¿Deseas eliminar tú sesión?");
+            builder.setMessage("¿Deseas eliminar tú cuenta?");
             builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-//
-//                    SharedPreferences preferences = getSharedPreferences("topic", MODE_PRIVATE);
-//                    SharedPreferences.Editor editor = preferences.edit();
-//
-//                    String topic = preferences.getString("topic", "NOEXISTE");
-//
-//                    FirebaseMessaging firebaseMessaging = FirebaseMessaging.getInstance();
-//                    firebaseMessaging.unsubscribeFromTopic(topic);
-//
-//                    editor.remove("topic");
-//                    editor.commit();
 
+                    SharedPreferences preferences = getSharedPreferences("topic", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
 
+                    String topic = preferences.getString("topic", "NOEXISTE");
 
-//                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//                    startActivity(intent);
+                    FirebaseMessaging firebaseMessaging = FirebaseMessaging.getInstance();
+                    firebaseMessaging.unsubscribeFromTopic(topic);
+
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("Usuarios").document(topic).delete();
+
+                    editor.remove("topic");
+                    editor.commit();
 
                     eliminar();
-
-                    //finish();
 
                 }
             });
@@ -118,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
 
             AlertDialog dialog = builder.create();
             dialog.show();
-
 
         });
     }

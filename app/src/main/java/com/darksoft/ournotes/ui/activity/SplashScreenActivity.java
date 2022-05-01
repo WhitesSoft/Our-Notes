@@ -29,13 +29,14 @@ public class SplashScreenActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-//                Vemos si hay un topic registrado
-//                SharedPreferences preferences = getSharedPreferences("topic", MODE_PRIVATE);
-//                String topic = preferences.getString("topic", "NOEXISTE");
+                //Vemos si hay un topic registrado
+                SharedPreferences preferences = getSharedPreferences("topic", MODE_PRIVATE);
+                String topic = preferences.getString("topic", "NOEXISTE");
 
                 //Vemos si hay una cuenta registrada
                 GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(SplashScreenActivity.this);
-                if(account != null){
+
+                if(!topic.equals("NOEXISTE") && account != null){
                     Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                     startActivity(intent);
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
@@ -46,6 +47,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     finish();
                 }
+
 
             }
         }, 2000);

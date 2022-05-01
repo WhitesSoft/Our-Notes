@@ -30,6 +30,8 @@ import com.darksoft.ournotes.domain.manager.PermissionManager;
 import com.darksoft.ournotes.ui.component.DrawingView;
 import com.darksoft.ournotes.ui.dialog.StrokeSelectorDialog;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -105,6 +107,7 @@ public class DrawerActivity extends AppCompatActivity {
 
     private void subirDB(String image) {
 
+        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
 
         SharedPreferences preferences = getSharedPreferences("topic", MODE_PRIVATE);
         String topic = preferences.getString("topic", "NOEXISTE");
@@ -115,6 +118,8 @@ public class DrawerActivity extends AppCompatActivity {
         datos.put("topic", topic);
         datos.put("image", image);
         datos.put("time", FieldValue.serverTimestamp());
+        datos.put("userName", usuario.getDisplayName());
+        datos.put("userCorreo", usuario.getEmail());
 
 
         db.collection("Notas").document(topic).collection("notas").

@@ -59,15 +59,15 @@ public class RegisterActivity extends AppCompatActivity {
 
         binding.btnLogin.setOnClickListener(view -> {
 
-            binding.btnLogin.setVisibility(View.GONE);
-            binding.cargando.setVisibility(View.VISIBLE);
-
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(getString(R.string.web_client_id))
                     .requestEmail()
                     .build();
 
             googleSignInClient = GoogleSignIn.getClient(this, gso);
+
+            binding.cargando.setVisibility(View.VISIBLE);
+            binding.btnLogin.setVisibility(View.INVISIBLE);
 
             if(WifiConexion || DatosConexion){
                 Intent signInIntent = googleSignInClient.getSignInIntent();
@@ -123,7 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void irPantallaPrincipal() {
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
 
         finish();

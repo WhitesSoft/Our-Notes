@@ -12,13 +12,22 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-8120562216582793~5448902060"/>
+
         <activity
             android:name=".ui.activity.RegisterActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.activity.LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.activity.SplashScreenActivity"
             android:exported="true"
@@ -29,10 +38,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.activity.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.activity.DrawerActivity"
             android:exported="true"
@@ -46,7 +57,9 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
-        </provider> <!-- SERVICIOS DE CLOUD MESSAGING -->
+        </provider>
+
+        <!-- SERVICIOS DE CLOUD MESSAGING -->
         <service
             android:name=".network.MyFirebaseMessagingService"
             android:exported="false">
@@ -58,9 +71,11 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/or" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
     </application>
 
 </manifest>

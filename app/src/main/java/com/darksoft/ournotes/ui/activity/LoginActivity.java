@@ -12,7 +12,13 @@ import android.widget.Toast;
 import com.darksoft.ournotes.R;
 import com.darksoft.ournotes.databinding.ActivityLoginBinding;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.ktx.Firebase;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -38,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
         binding.btnObtenerCodigo.setOnClickListener(view -> {
             binding.pincode.setText(getPassword(16));
+            binding.btnObtenerCodigo.setVisibility(View.GONE);
         });
 
         binding.btnLogin.setOnClickListener(view -> {
@@ -64,6 +71,16 @@ public class LoginActivity extends AppCompatActivity {
                 //Registramos el topic
                 FirebaseMessaging firebaseMessaging = FirebaseMessaging.getInstance();
                 firebaseMessaging.subscribeToTopic(pincode);
+
+                //Registramos al usuario en la bd
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+
+                HashMap<String, String> user = new HashMap<>();
+                user.put("userName", usuario.getDisplayName());
+                user.put("userCorreo", usuario.getEmail());
+
+                db.collection("Usuarios").document(pincode).set(user);
 
 
                 Intent intent = new Intent(this, MainActivity.class);
