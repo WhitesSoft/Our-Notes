@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.window.SplashScreen;
 
 import com.darksoft.ournotes.R;
 import com.darksoft.ournotes.databinding.ActivitySplashScreenBinding;
