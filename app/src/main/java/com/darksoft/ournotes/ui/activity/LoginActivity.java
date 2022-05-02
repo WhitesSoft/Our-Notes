@@ -11,12 +11,7 @@ import android.view.View;
 import com.darksoft.ournotes.R;
 import com.darksoft.ournotes.databinding.ActivityLoginBinding;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
-
-import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -25,7 +20,6 @@ public class LoginActivity extends AppCompatActivity {
     public static String NUMEROS = "0123456789";
     public static String MAYUSCULAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public static String MINUSCULAS = "abcdefghijklmnopqrstuvwxyz";
-    public static String ESPECIALES = "ñÑ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,17 +64,6 @@ public class LoginActivity extends AppCompatActivity {
                 FirebaseMessaging firebaseMessaging = FirebaseMessaging.getInstance();
                 firebaseMessaging.subscribeToTopic(pincode);
 
-                //Registramos al usuario en la bd
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
-
-                HashMap<String, String> user = new HashMap<>();
-                user.put("userName", usuario.getDisplayName());
-                user.put("userCorreo", usuario.getEmail());
-
-                db.collection("Usuarios").document(pincode).set(user);
-
-
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -108,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private static String getPassword(int length) {
-        return getPassword(NUMEROS + MAYUSCULAS + MINUSCULAS + ESPECIALES, length);
+        return getPassword(NUMEROS + MAYUSCULAS + MINUSCULAS, length);
     }
 
     private static String getPassword(String key, int length) {

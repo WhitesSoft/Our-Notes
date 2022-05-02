@@ -9,8 +9,8 @@ android {
         applicationId "com.darksoft.ournotes"
         minSdkVersion 24
         targetSdkVersion 31
-        versionCode 8
-        versionName "1.7"
+        versionCode 9
+        versionName "1.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
