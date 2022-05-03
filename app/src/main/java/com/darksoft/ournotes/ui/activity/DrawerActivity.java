@@ -18,9 +18,18 @@ import org.xdty.preference.colorpicker.ColorPickerSwatch;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import com.darksoft.ournotes.R;
 import com.darksoft.ournotes.domain.manager.FileManager;
 import com.darksoft.ournotes.domain.manager.PermissionManager;
+import com.darksoft.ournotes.network.APIService;
+import com.darksoft.ournotes.network.Client;
+import com.darksoft.ournotes.network.Data;
+import com.darksoft.ournotes.network.MyResponse;
+import com.darksoft.ournotes.network.NotificationSender;
 import com.darksoft.ournotes.ui.component.DrawingView;
 import com.darksoft.ournotes.ui.dialog.StrokeSelectorDialog;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,6 +63,9 @@ public class DrawerActivity extends AppCompatActivity {
     private static final int MAX_STROKE_WIDTH = 50;
     private final Map<String, Object> datos = new HashMap<>();
 
+    //ApiServiceMessaging
+    private APIService apiService;
+
     //Firebase
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final FirebaseStorage storage = FirebaseStorage.getInstance("gs://our-notes-bac14.appspot.com");
@@ -83,6 +95,40 @@ public class DrawerActivity extends AppCompatActivity {
 
 
     }
+
+    private void sendNotification() {
+
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+
+        SharedPreferences preferences = getSharedPreferences("topic", MODE_PRIVATE);
+        String topic = preferences.getString("topic", "NOEXISTE");
+        String TOPIC = "/topics/" + topic;
+
+        String title = "Te enviaron una nota ❤️";
+        String message = "Pulsa para entrar en la aplicación";
+
+        Data data = new Data(title, message);
+        NotificationSender notificationSender = new NotificationSender(data, TOPIC);
+        apiService.sendNotifcation(notificationSender).enqueue(new Callback<MyResponse>() {
+            @Override
+            public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                if (response.code() == 200) {
+                    if (response.body().success != 1) {
+                        Toast.makeText(DrawerActivity.this, "Failed ", Toast.LENGTH_LONG);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MyResponse> call, Throwable t) {
+
+            }
+        });
+
+
+    }
+
+
 
     private void subirImageStorage(Uri uri) {
        //Uri imageUri = Uri.fromFile(new File(mDrawingView.getBitmap().toString()));
@@ -117,6 +163,7 @@ public class DrawerActivity extends AppCompatActivity {
                 document(id).set(datos).addOnSuccessListener(task -> {
             Toast.makeText(this, "Nota enviada", Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
+            sendNotification();
             finish();
         });
 

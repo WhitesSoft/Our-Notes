@@ -11,6 +11,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.darksoft.ournotes.R;
 import com.darksoft.ournotes.ui.activity.MainActivity;
+import com.darksoft.ournotes.ui.activity.SplashScreenActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -26,8 +27,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        String title = remoteMessage.getNotification().getTitle();
-        String texto = remoteMessage.getNotification().getBody();
+        String title = remoteMessage.getData().get("Title");
+        String texto = remoteMessage.getData().get("Message");
+
 
         final String channel_id = "notificaciones_ournotes";
 
@@ -37,11 +39,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     NotificationManager.IMPORTANCE_HIGH);
             getSystemService(NotificationManager.class).createNotificationChannel(channel);
 
+            Intent intent = new Intent(this, SplashScreenActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, MyNotification.NOTIFICATION_ID,
+                    intent, PendingIntent.FLAG_ONE_SHOT);
+
             //Creamos la notificacion
             Notification.Builder notifacion = new Notification.Builder(this, channel_id)
                     .setContentTitle(title)
                     .setContentText(texto)
                     .setSmallIcon(R.drawable.or)
+                    .setContentIntent(pendingIntent)
                     .setAutoCancel(true);
 
             NotificationManagerCompat.from(this).notify(1, notifacion.build());
@@ -53,7 +60,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void sendNotification(String title, String msg) {
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, SplashScreenActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, MyNotification.NOTIFICATION_ID,
                 intent, PendingIntent.FLAG_ONE_SHOT);
 

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.darksoft.ournotes.R;
 import com.darksoft.ournotes.databinding.ActivityLoginBinding;
@@ -62,7 +63,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 //Registramos el topic
                 FirebaseMessaging firebaseMessaging = FirebaseMessaging.getInstance();
-                firebaseMessaging.subscribeToTopic(pincode);
+                firebaseMessaging.subscribeToTopic(pincode).addOnCompleteListener(task ->
+                        Toast.makeText(LoginActivity.this, "Suscrito", Toast.LENGTH_SHORT).show());
 
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);

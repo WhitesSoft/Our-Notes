@@ -101,9 +101,6 @@ public class MainActivity extends AppCompatActivity {
                     FirebaseMessaging firebaseMessaging = FirebaseMessaging.getInstance();
                     firebaseMessaging.unsubscribeFromTopic(topic);
 
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    db.collection("Usuarios").document(topic).delete();
-
                     editor.remove("topic");
                     editor.commit();
 
@@ -189,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
                 binding.rv.setAdapter(new HomeRecyclerAdapter(lista, R.layout.item_row, this));
 
             });
+
 
         }
 
