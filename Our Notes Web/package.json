@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "firebase-tools": "^10.6.0"
+    "firebase-tools": "^10.7.2"
   },
   "devDependencies": {
     "firebase-functions": "^3.20.1"

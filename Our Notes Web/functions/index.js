@@ -18,4 +18,3 @@ exports.sendNotificacionAndroid = functions.firestore.document("Notas/{docId}/{n
         );
     }
 )
-
